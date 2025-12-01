@@ -1,0 +1,28 @@
+name: inception
+
+networks:
+  my_network:
+    driver: bridge
+
+services:
+
+  mariadb:
+    build: ./mandatory/mariadb
+    container_name: mariadb:mine
+    restart: always
+  wordpress:
+    build: ./mandatory/wordpress
+    container_name: wordpress:mine
+    restart: always
+    depends_on:
+      - mariadb:
+        condition: service_healthy
+
+  nginx:
+    image: debian:latest
+    build: ./mandatory/nginx
+    container_name: nginx:mine
+    restart: always
+    depends_on:
+      - wordpress:
+        condition: service_healthy
