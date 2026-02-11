@@ -5,7 +5,6 @@ networks:
     driver: bridge
 
 services:
-
   mariadb:
     build: ./mandatory/mariadb
     container_name: mariadb:mine
@@ -16,7 +15,9 @@ services:
     restart: always
     depends_on:
       - mariadb:
-        condition: service_healthy
+          condition: service_healthy
+    volumes:
+      - ./srcs/mandatory/wordpress/wp-files:/var/www/wordpress
 
   nginx:
     image: debian:latest

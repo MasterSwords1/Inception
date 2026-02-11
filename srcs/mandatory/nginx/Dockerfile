@@ -1,8 +1,6 @@
-FROM alpine:latest
+FROM debian:bookworm
 
-RUN apk update
-
-RUN apk --no-cache add nginx openssl
+RUN apt update -y && apt install -y nginx openssl
 
 RUN mkdir -p /run/nginx /etc/nginx/ssl
 
