@@ -4,18 +4,36 @@ networks:
   my_network:
     driver: bridge
 
+secrets:
+  db_admin_user:
+    file: ./srcs/.env
+  db_admin_pass:
+    file: ./srcs/.env
+  db_user:
+    file: ./srcs/.env
+  db_user_pass:
+    file: ./srcs/.env
+
 services:
   mariadb:
     build: ./mandatory/mariadb
     container_name: mariadb:mine
     restart: always
+    environments:
+      DB_ADMIN: db_admin_user
+      DB_ADMIN_PASS: db_admin_pass
+      DB_WP_USER: db_user
+      DB_WPUSER_PASS: db_user_pass
+    secrets:
+      - db_admin_user
+
   wordpress:
     build: ./mandatory/wordpress
+    # restart: always
     container_name: wordpress:mine
-    restart: always
     depends_on:
-      - mariadb:
-          condition: service_healthy
+      mariadb:
+        condition: service_healthy
     volumes:
       - ./srcs/mandatory/wordpress/wp-files:/var/www/wordpress
 
@@ -25,5 +43,13 @@ services:
     container_name: nginx:mine
     restart: always
     depends_on:
-      - wordpress:
+      wordpress:
         condition: service_healthy
+
+volumes:
+  wordpress-db:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "rw"
+      device: /goinfre/wordpress-db
