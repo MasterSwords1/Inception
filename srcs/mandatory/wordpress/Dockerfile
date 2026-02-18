@@ -18,7 +18,7 @@ RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 RUN groupadd wordpress && useradd -g wordpress wordpress_user \
 	&& mkdir -p /var/www/wordpress \
 	&& chown -R wordpress_user:root /var/www/wordpress \
-	&& mkdir -p /home/wordpress_user/.wp-cli/cache/
+	&& mkdir -p /home/wordpress_user/.wp-cli/cache/core
 
 COPY ./script.sh /
 

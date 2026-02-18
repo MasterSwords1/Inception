@@ -11,7 +11,9 @@ RUN apt update -y && apt install -y mariadb-server
 # COPY ./tools/mariadb.sources /etc/apt/sources.list.d/
 COPY ./tools/mysqld.conf /etc/mysql/conf.d/
 COPY ./tools/script.sh /
+COPY ./tools/db-setup.sql /
 
 RUN chmod +x /script.sh
 
 # RUN apt install -y mariadb-server
+ENTRYPOINT ["./script.sh"]

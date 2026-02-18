@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mkdir -p /var/run/mysqld
 touch /var/run/mysqld/mysqld.sock
 touch /var/run/mysqld/mysqld.pid
@@ -9,7 +11,7 @@ service mariadb start
 mkdir mariadb-data
 
 if [[ $(ls -A mariadb-data/ | wc -l) == "0" ]]; then
-	mariadb-install-db --user=moulchi --datadir=/mariadb-data
+	mariadb-install-db --user=mysql --datadir=/mariadb-data
 fi
 
 mariadb -u root < db-setup.sql
