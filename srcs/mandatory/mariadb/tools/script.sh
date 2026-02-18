@@ -11,3 +11,5 @@ mkdir mariadb-data
 if [[ $(ls -A mariadb-data/ | wc -l) == "0" ]]; then
 	mariadb-install-db --user=moulchi --datadir=/mariadb-data
 fi
+
+mariadb -u root < db-setup.sql

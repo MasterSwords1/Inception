@@ -1,0 +1,9 @@
+# complete mariadb and wrdpress_db setup
+# php-fpm setup
+# nginx setup
+# use secrets and env variables
+# cadvisor (service of choice)
+# redis cache service
+# adminer
+# static page with programming language of choice
+# ftp server
