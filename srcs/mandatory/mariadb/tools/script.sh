@@ -9,5 +9,5 @@ service mariadb start
 mkdir mariadb-data
 
 if [[ $(ls -A mariadb-data/ | wc -l) == "0" ]]; then
-	mariadb-install-db --user=root --datadir=/mariadb-data
+	mariadb-install-db --user=moulchi --datadir=/mariadb-data
 fi
