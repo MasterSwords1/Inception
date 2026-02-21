@@ -1,8 +1,7 @@
 FROM debian:bookworm
 
-RUN apt update -y && apt install -y curl
-
-RUN apt -y install lsb-release apt-transport-https ca-certificates wget zip
+RUN apt update -y && apt install -y curl \
+		lsb-release apt-transport-https ca-certificates wget zip ssh mariadb-client
 
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 
@@ -16,10 +15,13 @@ RUN apt update -y && apt install -y php php-mysql php-curl php-json \
 RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
 RUN groupadd wordpress && useradd -g wordpress wordpress_user \
-	&& mkdir -p /var/www/wordpress \
-	&& chown -R wordpress_user:root /var/www/wordpress \
-	&& mkdir -p /home/wordpress_user/.wp-cli/cache/core
+	&& mkdir -p /var/www/wordpress
+	# && chown -R wordpress_user:root /var/www/wordpress \
+	# && mkdir -p /home/wordpress_user/ \
+	# && chown -R wordpress_user:root /home/wordpress_user/
 
 COPY ./script.sh /
 
 RUN chmod +x ./script.sh
+
+ENTRYPOINT ["./script.sh"]
