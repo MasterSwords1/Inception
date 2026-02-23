@@ -15,10 +15,10 @@ RUN apt update -y && apt install -y php php-mysql php-curl php-json \
 RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
 RUN groupadd wordpress && useradd -g wordpress wordpress_user \
-	&& mkdir -p /var/www/wordpress
-	# && chown -R wordpress_user:root /var/www/wordpress \
-	# && mkdir -p /home/wordpress_user/ \
-	# && chown -R wordpress_user:root /home/wordpress_user/
+	&& mkdir -p /var/www/wordpress \
+	&& chown -R wordpress_user:root /var/www/wordpress \
+	&& mkdir -p /home/wordpress_user/ \
+	&& chown -R wordpress_user:root /home/wordpress_user/
 
 COPY ./script.sh /
 
