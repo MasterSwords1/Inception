@@ -1,4 +1,8 @@
 [mysqld]
 
 user=mysql
+port=3306
+datadir=/mariadb-data
 pid-file=/var/run/mysqld/mysqld.pid
+socket=/var/run/mysqld/mysqld.sock
+log_error=/var/log/mysql/error.log

@@ -3,10 +3,12 @@
 mkdir -p /var/run/mysqld
 touch /var/run/mysqld/mysqld.sock
 touch /var/run/mysqld/mysqld.pid
-chown -R mysql:mysql /var/run/mysqld/mysqld.sock
+touch /run/mysqld/mysqld.sock
+touch /run/mysqld/mysqld.pid
 chown -R mysql:root /var/run/mysqld/
+chown -R mysql:root /run/mysqld/
 
-service mariadb start
+# service mariadb start
 
 mkdir mariadb-data 2&>/dev/null
 
@@ -16,4 +18,4 @@ fi
 
 mariadb -u root < db-setup.sql
 
-mariadb -u root
+mariadbd-safe --skip-grant-tables --socket=/var/run/mysqld/mysqld.sock --bind-address=0.0.0.0

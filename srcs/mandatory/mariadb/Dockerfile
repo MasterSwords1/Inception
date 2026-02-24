@@ -10,11 +10,11 @@ RUN apt update -y && apt install -y mariadb-server
 
 # COPY ./tools/mariadb.sources /etc/apt/sources.list.d/
 RUN sed -i 's/# port = 3306/port = 3306/' /etc/mysql/my.cnf
-COPY ./tools/mysqld.cnf /etc/mysql/conf.d/
+COPY ./tools/mysqld.cnf /etc/mysql/conf.d/50-server.cnf
 COPY ./tools/script.sh /
 COPY ./tools/db-setup.sql /
 
 RUN chmod +x /script.sh
 
 # RUN apt install -y mariadb-server
-ENTRYPOINT ["./script.sh"]
+ENTRYPOINT ["bash"]
