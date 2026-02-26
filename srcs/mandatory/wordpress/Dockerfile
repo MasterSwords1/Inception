@@ -20,7 +20,14 @@ RUN groupadd wordpress && useradd -g wordpress wordpress_user \
 	&& mkdir -p /home/wordpress_user/ \
 	&& chown -R wordpress_user:root /home/wordpress_user/
 
+RUN sed -i 's/;daemonize = yes/daemonize = yes/' /etc/php/8.4/fpm/php-fpm.conf
+
+RUN sed -i "s/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 0.0.0.0/" /etc/php/8.4/fpm/pool.d/www.conf
+RUN sed -i "s/listen = /run/php/php8.4-fpm.sock/listen = /var/run/php/php8.4-fpm.sock/" /etc/php/8.4/fpm/pool.d/www.conf
+
 COPY ./script.sh /
+
+COPY ./wp_pool.conf /etc/php/8.4/fpm/pool.d/wordpress_pool.conf
 
 RUN chmod +x ./script.sh
 

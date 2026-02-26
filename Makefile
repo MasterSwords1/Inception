@@ -1,3 +1,3 @@
 
 all:
-	docker compose -f srcs/docker-compose.yml up
+	docker compose -f srcs/mandatory/docker-compose.yml up
