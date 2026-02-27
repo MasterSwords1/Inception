@@ -19,11 +19,6 @@ services:
     build: ./mandatory/mariadb
     container_name: mariadb:mine
     restart: always
-    environments:
-      DB_ADMIN: db_admin_user
-      DB_ADMIN_PASS: db_admin_pass
-      DB_WP_USER: db_user
-      DB_WPUSER_PASS: db_user_pass
     secrets:
       - db_admin_user
 
