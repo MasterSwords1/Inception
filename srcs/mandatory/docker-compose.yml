@@ -1,7 +1,7 @@
 name: inception
 
 networks:
-  my_network:
+  my_net:
     driver: bridge
 
 volumes:
@@ -19,6 +19,8 @@ services:
     environment:
       - WP_ADMIN=${WP_ADMIN}
       - WP_USER=${WP_USER}
+    networks:
+      - my_net
 
   wordpress:
     build: ./wordpress
@@ -33,6 +35,8 @@ services:
     depends_on:
       mariadb:
         condition: service_started
+    networks:
+      - my_net
 
   nginx:
     build: ./nginx
@@ -40,6 +44,10 @@ services:
     restart: always
     ports:
       - 8080:8080
+    volumes:
+      - wp-files:/var/www/wordpress
     depends_on:
       wordpress:
         condition: service_started
+    networks:
+      - my_net
