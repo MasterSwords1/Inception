@@ -15,8 +15,11 @@ fi
 
 service mariadb start
 
-mariadb -u root < db-setup.sql
-
+mariadb -u root -e "CREATE DATABASE IF NOT EXISTS wordpress_db;"
+mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_ADMIN'@'%' IDENTIFIED BY '$WP_ADMIN_PASS';" wordpress_db
+mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_ADMIN'@'%';" wordpress_db
+mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_USER_PASS';" wordpress_db
+mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_USER'@'%';" wordpress_db
 service mariadb stop
 
 mariadbd --socket=/var/run/mysqld/mysqld.sock --bind-address=0.0.0.0

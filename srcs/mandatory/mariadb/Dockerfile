@@ -9,7 +9,7 @@ COPY ./tools/script.sh /
 
 COPY ./tools/mysqld.cnf /etc/mysql/conf.d/mysqld.cnf
 
-COPY ./tools/db-setup.sql /
+# COPY ./tools/db-setup.sql /
 
 RUN chmod +x /script.sh
 
