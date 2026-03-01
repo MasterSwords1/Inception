@@ -22,4 +22,4 @@ mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_
 mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_USER'@'%';" wordpress_db
 service mariadb stop
 
-mariadbd --socket=/var/run/mysqld/mysqld.sock --bind-address=0.0.0.0
+mariadbd -u mysql

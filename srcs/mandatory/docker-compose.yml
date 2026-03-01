@@ -21,6 +21,12 @@ services:
       - WP_USER=${WP_USER}
     networks:
       - my_net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          '[ -d /mariadb-data ] && [ "$(ls -A /mariadb-data 2>/dev/null)" ]',
+        ]
 
   wordpress:
     build: ./wordpress
@@ -34,7 +40,7 @@ services:
       - WP_ADMIN=${WP_ADMIN}
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
     networks:
       - my_net
 
