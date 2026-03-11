@@ -1,1 +1,28 @@
-service:
+name: inception-bonus
+
+include:
+  - ../mandatory/docker-compose.yml
+
+networks:
+  my_net:
+    driver: bridge
+
+volumes:
+  mariadb-data:
+
+  wp-files:
+
+services:
+  ftp-serer:
+    build: ./ftp-server
+    container_name: ftp_server
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - wp-files:/home/wp-filer
+    networks:
+      - my_net
+    ports:
+      - 2121:2121

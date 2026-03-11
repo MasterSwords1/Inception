@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 30
 
 if [ ! -f /var/run/php/php-fpm.sock ]; then
 	touch /var/run/php/php-fpm.sock

@@ -22,6 +22,8 @@ services:
     networks:
       - my_net
     healthcheck:
+      start_period: 1m
+      interval: 1m
       test:
         [
           "CMD-SHELL",
@@ -43,6 +45,14 @@ services:
         condition: service_healthy
     networks:
       - my_net
+    healthcheck:
+      start_period: 1m
+      interval: 1m
+      test:
+        [
+          "CMD-SHELL",
+          '[ -d /var/www/wordpress ] && [ "$(ls -A /var/www/wordpress 2>/dev/null)" ]',
+        ]
 
   nginx:
     build: ./nginx
@@ -54,6 +64,6 @@ services:
       - wp-files:/var/www/wordpress
     depends_on:
       wordpress:
-        condition: service_started
+        condition: service_healthy
     networks:
       - my_net
