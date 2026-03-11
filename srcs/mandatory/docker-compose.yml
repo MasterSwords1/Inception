@@ -59,7 +59,7 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - 8080:8080
+      - 8080:443
     volumes:
       - wp-files:/var/www/wordpress
     depends_on:

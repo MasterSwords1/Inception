@@ -1,8 +1,5 @@
 name: inception-bonus
 
-include:
-  - ../mandatory/docker-compose.yml
-
 networks:
   my_net:
     driver: bridge
@@ -13,7 +10,7 @@ volumes:
   wp-files:
 
 services:
-  ftp-serer:
+  ftp-server:
     build: ./ftp-server
     container_name: ftp_server
     depends_on:
@@ -25,4 +22,61 @@ services:
     networks:
       - my_net
     ports:
-      - 2121:2121
+      - 2222:22
+  mariadb:
+    build: ./mariadb
+    container_name: mariadb
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - WP_ADMIN=${WP_ADMIN}
+      - WP_USER=${WP_USER}
+    networks:
+      - my_net
+    healthcheck:
+      start_period: 1m
+      interval: 1m
+      test:
+        [
+          "CMD-SHELL",
+          '[ -d /mariadb-data ] && [ "$(ls -A /mariadb-data 2>/dev/null)" ]',
+        ]
+
+  wordpress:
+    build: ./wordpress
+    container_name: wordpress
+    restart: always
+    volumes:
+      - wp-files:/var/www/wordpress
+    env_file:
+      - ./.env
+    environment:
+      - WP_ADMIN=${WP_ADMIN}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - my_net
+    healthcheck:
+      start_period: 1m
+      interval: 1m
+      test:
+        [
+          "CMD-SHELL",
+          '[ -d /var/www/wordpress ] && [ "$(ls -A /var/www/wordpress 2>/dev/null)" ]',
+        ]
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - 8080:443
+    volumes:
+      - wp-files:/var/www/wordpress
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    networks:
+      - my_net

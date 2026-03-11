@@ -1,22 +1,35 @@
 FROM debian:bookworm
 
-RUN apt update -y && apt install -y vsftpd
+RUN apt update -y && apt install -y openssh-server
 
-RUN sed -i "s/anonymous_enable=YES/anonymous_enable=NO/g" /etc/vsftpd.conf
-RUN sed -i "s/#write_enable=YES/write_enable=YES/g" /etc/vsftpd.conf
-RUN sed -i "s/#chroot_local_user=YES/chroot_local_user=YES/g" /etc/vsftpd.conf
-RUN echo "listen_port=2121" >> /etc/vsftpd.conf
+# RUN sed -i "s/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/HostKey \/etc\/ssh\/ssh_host_ed25519_key/g" /etc/ssh/sshd_config
+# RUN sed -i "s/X11Forwarding yes/X11Forwarding no/g" /etc/ssh/sshd_config
+# RUN sed -i "s/#LoginGraceTime 2m/LoginGraceTime 2m/g" /etc/ssh/sshd_config
+# RUN sed -i "s#PasswordAuthentication yes/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+# RUN echo "listen_port=2121" >> /etc/vsftpd.conf
 
-RUN addgroup wp-filer
-RUN useradd wp-filer -g wp-filer
+RUN service ssh stop
+RUN echo \
+	$'Port 22\n\
+	AddressFamily any \n\
+	ListenAddress 0.0.0.0 \n\
+	ChrootDirectory \/home \n\
+	AllowGroups ftp_users \n\
+	LoginGraceTime 2m \n\
+	PasswordAuthentication yes \n\
+	X11Forwarding no' >> /etc/ssh/sshd_config.d/my_config
 
-RUN mkdir -p /home/wp-filer
+RUN addgroup ftp_users
+RUN useradd -m wp-filer -g ftp_users
 
-RUN chown -R wp-filer:wp-filer /home/wp-filer
-
-RUN usermod -d /home/wp-filer/ wp-filer
+# RUN usermod -d /home/wp-filer/ wp-filer
 
 RUN echo 'wp-filer:sercer_pass' | chpasswd
 
 
-ENTRYPOINT [ "vsftpd", "/etc/vsftpd.conf" ]
+RUN chmod 700 /home/wp-filer
+
+RUN service ssh start
+
+# ENTRYPOINT [ "vsftpd", "/etc/vsftpd.conf" ]
+ENTRYPOINT [ "bash" ]

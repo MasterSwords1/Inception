@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 30
+sleep 60
 
 service nginx stop
 
