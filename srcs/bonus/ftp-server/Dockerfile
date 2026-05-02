@@ -18,11 +18,11 @@ RUN useradd -m wp-filer -g ftp_users
 
 RUN echo 'wp-filer:secret_pass' | chpasswd
 
-
 RUN chmod 700 /home/wp-filer \
 	&& mkdir /run/sshd && chmod 755 /run/sshd
 
 COPY ./script.sh /
+COPY ./my_ssh.conf /etc/sshd_config.f/my.conf
 
 RUN chmod +x /script.sh
 

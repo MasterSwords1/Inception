@@ -20,7 +20,7 @@ wp config create \
   --dbpass=$WP_ADMIN_PASS \
   --force
 
-wp core install --path=/var/www/wordpress/ --allow-root --url='localhost' --title=WordPress --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+wp core install --path=/var/www/wordpress/ --allow-root --url='localhost' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
 
 wp option update home 'https://localhost:443' --allow-root --path=/var/www/wordpress
 wp option update siteurl 'https://localhost:443' --allow-root --path=/var/www/wordpress

@@ -1,4 +1,4 @@
-name: inception-bonus
+name: inception_bonus
 
 networks:
   my_net:
@@ -23,10 +23,13 @@ services:
       - my_net
     ports:
       - 2222:22
+
   mariadb:
     build: ./mariadb
     container_name: mariadb
     restart: always
+    volumes:
+      - mariadb-data:/mariadb-data
     env_file:
       - ./.env
     environment:
@@ -80,3 +83,15 @@ services:
         condition: service_healthy
     networks:
       - my_net
+
+  redis:
+    build: ./redis
+    container_name: redis
+    restart: always
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    networks:
+      - my_net
+    # volumes:
+    #   -

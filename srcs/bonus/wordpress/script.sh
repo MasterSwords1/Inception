@@ -25,6 +25,11 @@ wp core install --path=/var/www/wordpress/ --allow-root --url='localhost' --titl
 wp option update home 'https://localhost:443' --allow-root --path=/var/www/wordpress
 wp option update siteurl 'https://localhost:443' --allow-root --path=/var/www/wordpress
 
+# wp plugin install redis-cache --activate --allow-root --path=/var/www/wordpress/
+
+# wp config set WP_REDIS_HOST "redis" --add --allow-root --path=/var/www/wordpress/
+# wp config set WP_REDIS_DATABASE "15" --allow-root --path=/var/www/wordpress/
+
 service php8.4-fpm stop
 
 php-fpm8.4 -F
