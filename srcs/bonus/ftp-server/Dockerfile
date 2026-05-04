@@ -4,12 +4,12 @@ RUN apt update -y && apt install -y openssh-server
 
 RUN service ssh stop
 
-RUN sed -i "s/;Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server/Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server -l VERBOSE/"\
+RUN sed -i "s/Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server/Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server -l VERBOSE/"\
 		/etc/ssh/sshd_config
 
-RUN sed -i 's/;#HostKey \/home\/ssh_host_rsa_key/HostKey \/home\/ssh_host_rsa_key/' /etc/ssh/sshd_config
-RUN sed -i 's/;#HostKey \/home\/ssh_host_ecdsa_key/HostKey \/home\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config
-RUN sed -i 's/;#HostKey \/home\/ssh_host_ed25519_key/HostKey \/home\/ssh_host_ed25519_key/' /etc/ssh/sshd_config
+RUN sed -i 's/#HostKey \/home\/ssh_host_rsa_key/HostKey \/home\/ssh_host_rsa_key/' /etc/ssh/sshd_config
+RUN sed -i 's/#HostKey \/home\/ssh_host_ecdsa_key/HostKey \/home\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config
+RUN sed -i 's/#HostKey \/home\/ssh_host_ed25519_key/HostKey \/home\/ssh_host_ed25519_key/' /etc/ssh/sshd_config
 
 RUN addgroup ftp_users
 RUN useradd -m wp-filer -g ftp_users

@@ -8,8 +8,8 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
 	| tee /etc/apt/sources.list.d/php.list
 
-RUN apt update -y && apt install -y php php-mysql php-curl php-json \
-	php-xml php-mbstring php-fpm && curl -O \
+RUN apt update -y && apt install -y php php8.5-mysql php-mysql php-curl php-json \
+	php-xml php-mbstring php-fpm php-redis && curl -O \
 	https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp

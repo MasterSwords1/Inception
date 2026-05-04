@@ -6,24 +6,25 @@ if [ ! -f /var/run/php/php-fpm.sock ]; then
 	touch /var/run/php/php-fpm.sock
 fi
 
-
-if ! wp core is-installed 2>/dev/null; then
+if ! wp core is-installed --path=/var/www/wordpress --allow-root; then
 	wp core download --path=/var/www/wordpress --allow-root
 fi
 
-wp config create \
-  --path=/var/www/wordpress/ \
-  --allow-root \
-  --dbname=wordpress_db \
-  --dbuser=$WP_ADMIN \
-  --dbhost=mariadb \
-  --dbpass=$WP_ADMIN_PASS \
-  --force
+if [ ! -f /var/www/wordpress/wp-config.php ]; then
 
-wp core install --path=/var/www/wordpress/ --allow-root --url='localhost' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+    wp config create \
+    --path=/var/www/wordpress/ \
+    --allow-root \
+    --dbname=wordpress_db \
+    --dbuser=$WP_ADMIN \
+    --dbhost=mariadb \
+    --dbpass=$WP_ADMIN_PASS
+fi
 
-wp option update home 'https://localhost:443' --allow-root --path=/var/www/wordpress
-wp option update siteurl 'https://localhost:443' --allow-root --path=/var/www/wordpress
+wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost:8080' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+
+wp option update home 'https://localhost:8080' --allow-root --path=/var/www/wordpress
+wp option update siteurl 'https://localhost:8080' --allow-root --path=/var/www/wordpress
 
 service php8.4-fpm stop
 

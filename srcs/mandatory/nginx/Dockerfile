@@ -13,7 +13,7 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 RUN openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 	-keyout /etc/nginx/ssl/key.key \
 	-out /etc/nginx/ssl/cert.crt \
-	-subj "/C=US/ST=CA/L=SanFrancisco/O=LOL/CN=localhost" \
+	-subj "/C=US/ST=CA/L=SanFrancisco/O=LOL/CN=ariyad.42.fr" \
 	-addext "subjectAltName=DNS:ariyad.42.fr,DNS:localhost"
 
 COPY ./script.sh /

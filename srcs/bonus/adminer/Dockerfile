@@ -1,0 +1,27 @@
+FROM debian:bookworm
+
+RUN apt update -y && apt install -y curl \
+	lsb-release apt-transport-https wget
+
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+
+RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
+	| tee /etc/apt/sources.list.d/php.list
+
+RUN apt update -y && apt install -y php php-mysql php-curl php-json \
+	php-xml php-mbstring php-fpm
+
+RUN sed -i 's/;daemonize = yes/daemonize = yes/' /etc/php/8.4/fpm/php-fpm.conf
+
+RUN sed -i "s/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 0.0.0.0/" /etc/php/8.4/fpm/pool.d/www.conf
+RUN sed -i "s/listen = \/run\/php\/php8.4-fpm.sock/listen = \/var\/run\/php\/php8.4-fpm.sock/" /etc/php/8.4/fpm/pool.d/www.conf
+
+COPY ./script.sh /
+
+COPY ./wp_pool.conf /etc/php/8.4/fpm/pool.d/wordpress_pool.conf
+
+RUN groupadd wordpress_user && useradd -g wordpress_user wordpress_user
+
+RUN chmod +x ./script.sh
+
+ENTRYPOINT ["./script.sh"]
