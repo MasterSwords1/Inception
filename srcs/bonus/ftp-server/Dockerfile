@@ -10,14 +10,8 @@ RUN service ssh stop
 RUN sed -i "s/Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server/Subsystem	sftp	\/usr\/lib\/openssh\/sftp-server -l VERBOSE/"\
 		/etc/ssh/sshd_config
 
-# RUN sed -i 's/#HostKey \/home\/ssh_host_rsa_key/HostKey \/home\/ssh_host_rsa_key/' /etc/ssh/sshd_config
-# RUN sed -i 's/#HostKey \/home\/ssh_host_ecdsa_key/HostKey \/home\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config
-# RUN sed -i 's/#HostKey \/home\/ssh_host_ed25519_key/HostKey \/home\/ssh_host_ed25519_key/' /etc/ssh/sshd_config
-
 RUN addgroup ftp_users
 RUN useradd -m $FTP_USER -g ftp_users
-
-# RUN usermod -d /home/wp-filer/ wp-filer
 
 RUN echo "$FTP_USER:$FTP_USER_PASS" | chpasswd
 

@@ -20,8 +20,7 @@ mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_ADMIN'@'%' IDENTIFIED BY '$WP
 mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_ADMIN'@'%';" wordpress_db
 mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_USER_PASS';" wordpress_db
 mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_USER'@'%';" wordpress_db
-# mariadb -u root -e "CREATE USER IF NOT EXISTS 'redis-cacher'@'%' IDENTIFIED BY 'redis-cacher';" wordpress_db
-# mariadb -u root -e "GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON wordpress_db.* TO 'redis-cacher'@'localhost';" wordpress_db
+
 service mariadb stop
 
 mariadbd -u mysql
