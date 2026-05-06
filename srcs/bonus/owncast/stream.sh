@@ -1,7 +1,19 @@
 #!/bin/bash
 
 VIDEO_DIR="/videos"
-RTMP_URL="rtmp://localhost:1935/live/stream"
+RTMP_URL="rtmp://localhost:1935/live/abc123"
+
+PLAYLIST_URL="https://www.youtube.com/playlist?list=PLke4g-fS3LOaaUgmHkFiQ8K9Bww8dfKTf"
+
+# If directory is empty → run yt-dlp
+if [ -z "$(ls -A /videos)" ]; then
+    cd /videos && \
+    /yt-dlp_linux \
+      -f "bv*[ext=mp4][height<=1080]+ba*[ext=m4a]/b[ext=mp4][height<=1080]" \
+      --merge-output-format mp4 \
+      -o "%(title)s.%(ext)s" \
+      "$PLAYLIST_URL" && cd -
+fi
 
 while true; do
   shopt -s nullglob

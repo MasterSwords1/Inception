@@ -9,11 +9,17 @@ volumes:
 
   wp-files:
 
-  minecraft-data:
+  stream-data:
+
+  owncast-data:
 
 services:
   ftp-server:
-    build: ./ftp-server
+    build:
+      context: ./ftp-server
+      args:
+        - FTP_USER=${FTP_USER}
+        - FTP_USER_PASS=${FTP_USER_PASS}
     container_name: ftp_server
     depends_on:
       wordpress:
@@ -27,8 +33,8 @@ services:
       - 2222:22
 
   owncast:
-    build: ./minecraft
-    container_name: minecraft
+    build: ./owncast
+    container_name: owncast
     restart: always
     networks:
       - my_net
@@ -36,6 +42,7 @@ services:
       - 8000:8000
     volumes:
       - stream-data:/videos
+      - owncast-data:/owncast/data
   mariadb:
     build: ./mariadb
     container_name: mariadb
