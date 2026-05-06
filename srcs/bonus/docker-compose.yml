@@ -9,6 +9,8 @@ volumes:
 
   wp-files:
 
+  minecraft-data:
+
 services:
   ftp-server:
     build: ./ftp-server
@@ -24,6 +26,16 @@ services:
     ports:
       - 2222:22
 
+  owncast:
+    build: ./minecraft
+    container_name: minecraft
+    restart: always
+    networks:
+      - my_net
+    ports:
+      - 8000:8000
+    volumes:
+      - stream-data:/videos
   mariadb:
     build: ./mariadb
     container_name: mariadb
