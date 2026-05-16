@@ -33,7 +33,10 @@ services:
         ]
 
   wordpress:
-    build: ./wordpress
+    build:
+      context: ./wordpress
+      args:
+        - WORDPRESS_USER=wordpress_user
     container_name: wordpress
     restart: always
     volumes:

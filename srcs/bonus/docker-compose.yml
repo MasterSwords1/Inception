@@ -36,8 +36,6 @@ services:
     build: ./owncast
     container_name: owncast
     restart: always
-    networks:
-      - my_net
     ports:
       - 8000:8000
     volumes:
@@ -66,7 +64,10 @@ services:
         ]
 
   wordpress:
-    build: ./wordpress
+    build:
+      context: ./wordpress
+      args:
+        - WORDPRESS_USER=wordpress_user
     container_name: wordpress
     restart: always
     volumes:
@@ -92,7 +93,9 @@ services:
         ]
 
   adminer:
-    build: ./adminer
+    build:
+      context: ./adminer
+      args: WORDPRESS_USER=wordpress_user
     container_name: adminer
     restart: always
     volumes:

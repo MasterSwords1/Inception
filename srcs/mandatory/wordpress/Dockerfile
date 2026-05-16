@@ -1,5 +1,7 @@
 FROM debian:bookworm
 
+ARG WORDPRESS_USER
+
 RUN apt update -y && apt install -y curl \
 	lsb-release apt-transport-https ca-certificates wget zip ssh mariadb-client
 
@@ -14,11 +16,11 @@ RUN apt update -y && apt install -y php php-mysql php-curl php-json \
 
 RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
-RUN groupadd wordpress_user && useradd -g wordpress_user wordpress_user \
+RUN groupadd $WORDPRESS_USER && useradd -g $WORDPRESS_USER $WORDPRESS_USER \
 	&& mkdir -p /var/www/wordpress \
-	&& chown -R wordpress_user:wordpress_user /var/www/wordpress \
-	&& mkdir -p /home/wordpress_user/ \
-	&& chown -R wordpress_user:wordpress_user /home/wordpress_user/
+	&& chown -R $WORDPRESS_USER:$WORDPRESS_USER /var/www/wordpress \
+	&& mkdir -p /home/$WORDPRESS_USER/ \
+	&& chown -R $WORDPRESS_USER:$WORDPRESS_USER /home/$WORDPRESS_USER/
 
 RUN sed -i 's/;daemonize = yes/daemonize = yes/' /etc/php/8.4/fpm/php-fpm.conf
 

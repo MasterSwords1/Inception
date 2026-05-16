@@ -1,5 +1,7 @@
 FROM debian:bookworm
 
+ARG WORDPRESS_USER
+
 RUN apt update -y && apt install -y curl \
 	lsb-release apt-transport-https wget
 
@@ -20,7 +22,7 @@ COPY ./script.sh /
 
 COPY ./wp_pool.conf /etc/php/8.4/fpm/pool.d/wordpress_pool.conf
 
-RUN groupadd wordpress_user && useradd -g wordpress_user wordpress_user
+RUN groupadd $WORDPRESS_USER && useradd -g $WORDPRESS_USER $WORDPRESS_USER
 
 RUN chmod +x ./script.sh
 
