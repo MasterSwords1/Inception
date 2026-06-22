@@ -21,10 +21,10 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
     --dbpass=$WP_ADMIN_PASS
 fi
 
-wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost:8080' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost:443' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
 
-wp option update home 'https://localhost:8080' --allow-root --path=/var/www/wordpress
-wp option update siteurl 'https://localhost:8080' --allow-root --path=/var/www/wordpress
+wp option update home 'https://localhost:443' --allow-root --path=/var/www/wordpress
+wp option update siteurl 'https://localhost:443' --allow-root --path=/var/www/wordpress
 
 service php8.4-fpm stop
 

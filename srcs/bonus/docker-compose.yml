@@ -95,7 +95,8 @@ services:
   adminer:
     build:
       context: ./adminer
-      args: WORDPRESS_USER=wordpress_user
+      args:
+        - WORDPRESS_USER=wordpress_user
     container_name: adminer
     restart: always
     volumes:
