@@ -6,12 +6,24 @@ networks:
 
 volumes:
   mariadb-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ariyad/data/mariadb_data
 
   wp-files:
-
-  stream-data:
-
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ariyad/data/wp_data
   owncast-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ariyad/data/owncast_data
 
 services:
   ftp-server:
@@ -39,7 +51,6 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - stream-data:/videos
       - owncast-data:/owncast/data
   mariadb:
     build: ./mariadb
@@ -112,7 +123,7 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - 8080:443
+      - 443:443
     volumes:
       - wp-files:/var/www/wordpress
     depends_on:
