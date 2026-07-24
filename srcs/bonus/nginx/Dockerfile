@@ -6,9 +6,7 @@ RUN mkdir -p /run/nginx /etc/nginx/ssl /var/www/wordpress
 
 RUN chown -R www-data:www-data /var/www/wordpress
 
-RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.old
-
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./wordpress.conf /etc/nginx/sites-enabled/wordpress
 
 RUN openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 	-keyout /etc/nginx/ssl/key.key \
