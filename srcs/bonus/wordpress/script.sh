@@ -19,10 +19,10 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
     --dbpass=$WP_ADMIN_PASS
 fi
 
-wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost:443' --title=WordPress --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost' --title=WordPress --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
 
-wp option update home 'https://localhost:443' --allow-root --path=/var/www/wordpress
-wp option update siteurl 'https://localhost:443' --allow-root --path=/var/www/wordpress
+wp option update home 'https://localhost' --allow-root --path=/var/www/wordpress
+wp option update siteurl 'https://localhost' --allow-root --path=/var/www/wordpress
 
 wp plugin install redis-cache --activate --allow-root --path=/var/www/wordpress/
 
