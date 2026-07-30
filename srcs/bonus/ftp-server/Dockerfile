@@ -23,4 +23,6 @@ COPY ./my_ssh.conf /etc/sshd_config.f/my.conf
 
 RUN chmod +x /script.sh
 
+EXPOSE 22
+
 ENTRYPOINT [ "./script.sh"]

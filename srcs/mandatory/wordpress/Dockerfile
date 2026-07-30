@@ -2,7 +2,8 @@ FROM debian:bookworm
 
 ARG WORDPRESS_USER
 
-RUN apt update -y && apt install -y curl \
+RUN apt update -y
+RUN apt install -y curl \
 	lsb-release apt-transport-https ca-certificates wget zip ssh mariadb-client
 
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg

@@ -1,6 +1,7 @@
 FROM debian:bookworm
 
-RUN apt update -y && apt install -y zip wget curl ffmpeg
+RUN apt update -y 
+RUN apt install -y zip wget curl ffmpeg
 
 RUN mkdir -p owncast/data
 RUN mkdir videos
@@ -17,5 +18,7 @@ RUN unzip owncast-0.2.5-linux-64bit.zip
 
 COPY ./script.sh .
 RUN chmod +x ./script.sh
+
+EXPOSE 8000
 
 ENTRYPOINT ["./script.sh"]

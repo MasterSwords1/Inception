@@ -28,4 +28,4 @@ log:
 	docker compose -f srcs/mandatory/docker-compose.yml logs -n 10
 
 bonus_log:
-	docker compose -f srcs/bonus/docker-compose.yml logs -f
+	docker compose -f srcs/bonus/docker-compose.yml logs -n 10
