@@ -1,31 +1,37 @@
 #!/bin/bash
+set -e
 
-sleep 30
+# Wait for MariaDB using native client checks instead of sleep loops
+echo "Waiting for MariaDB..."
+until mariadb -h mariadb -u "${WP_ADMIN}" -p"${WP_ADMIN_PASS}" -e "SELECT 1;" &>/dev/null; do
+    sleep 1
+done
+echo "MariaDB is online!"
 
-if [ ! -f /var/run/php/php-fpm.sock ]; then
-	touch /var/run/php/php-fpm.sock
-fi
+cd /var/www/wordpress
 
-if ! wp core is-installed --path=/var/www/wordpress --allow-root; then
-	wp core download --path=/var/www/wordpress --allow-root
-fi
-
-if [ ! -f /var/www/wordpress/wp-config.php ]; then
-
+# Clean installation process
+if ! wp core is-installed --allow-root; then
+    wp core download --allow-root
     wp config create \
-    --path=/var/www/wordpress/ \
-    --allow-root \
-    --dbname=wordpress_db \
-    --dbuser=$WP_ADMIN \
-    --dbhost=mariadb \
-    --dbpass=$WP_ADMIN_PASS
+        --allow-root \
+        --dbname=wordpress_db \
+        --dbuser="${WP_ADMIN}" \
+        --dbhost=mariadb \
+        --dbpass="${WP_ADMIN_PASS}"
+    
+    wp core install \
+        --allow-root \
+        --url="https://${DOMAIN_NAME:-localhost}" \
+        --title="Inception" \
+        --admin_user="${WP_ADMIN}" \
+        --admin_password="${WP_ADMIN_PASS}" \
+        --admin_email="${WP_ADMIN_EMAIL:-admin@domain.com}"
 fi
 
-wp core install --path=/var/www/wordpress/ --allow-root --url='https://localhost' --title=Inception --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=moulchi@example.com
+# Apply ownership to wordpress volume
+chown -R wordpress_user:wordpress_user /var/www/wordpress
 
-wp option update home 'https://localhost' --allow-root --path=/var/www/wordpress
-wp option update siteurl 'https://localhost' --allow-root --path=/var/www/wordpress
+# Run PHP-FPM in foreground (daemon off)
+exec php-fpm8.2 -F
 
-service php8.4-fpm stop
-
-php-fpm8.4 -F

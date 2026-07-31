@@ -1,26 +1,28 @@
 #!/bin/bash
+set -e
 
+# Secure runtime directory for PID/socket
 mkdir -p /var/run/mysqld
-touch /var/run/mysqld/mysqld.sock
-touch /var/run/mysqld/mysqld.pid
-chown -R mysql:root /var/run/mysqld/
-chown -R mysql:root /run/mysqld/
+chown -R mysql:mysql /var/run/mysqld
 
-
-mkdir mariadb-data 2&>/dev/null
-
-if [[ $(ls -A /mariadb-data/ | wc -l) == "0" ]]; then
-	mariadb-install-db --user=mysql --datadir=/mariadb-data 2&>/dev/null
+# Initialize database if empty
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
+    
+    # Bootstrap setup using a temporary SQL file to prevent race conditions
+    tmp_sql="/tmp/init.sql"
+    cat << EOF > "$tmp_sql"
+FLUSH PRIVILEGES;
+CREATE DATABASE IF NOT EXISTS wordpress_db;
+CREATE USER IF NOT EXISTS '${WP_ADMIN}'@'%' IDENTIFIED BY '${WP_ADMIN_PASS}';
+GRANT ALL PRIVILEGES ON wordpress_db.* TO '${WP_ADMIN}'@'%';
+CREATE USER IF NOT EXISTS '${WP_USER}'@'%' IDENTIFIED BY '${WP_USER_PASS}';
+GRANT ALL PRIVILEGES ON wordpress_db.* TO '${WP_USER}'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${WP_ADMIN_PASS}';
+FLUSH PRIVILEGES;
+EOF
+    mariadbd --user=mysql --bootstrap < "$tmp_sql"
+    rm -f "$tmp_sql"
 fi
 
-service mariadb start
-
-mariadb -u root -e "CREATE DATABASE IF NOT EXISTS wordpress_db;"
-mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_ADMIN'@'%' IDENTIFIED BY '$WP_ADMIN_PASS';" wordpress_db
-mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_ADMIN'@'%';" wordpress_db
-mariadb -u root -e "CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_USER_PASS';" wordpress_db
-mariadb -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO '$WP_USER'@'%';" wordpress_db
-
-service mariadb stop
-
-mariadbd -u mysql
+exec mariadbd --user=mysql

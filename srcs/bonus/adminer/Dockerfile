@@ -1,30 +1,29 @@
 FROM debian:bookworm
 
-ARG WORDPRESS_USER
+ARG WORDPRESS_USER=wordpress_user
 
-RUN apt update -y 
-RUN apt install -y curl \
-	lsb-release apt-transport-https wget
+# Install native PHP 8.2 packages & wget
+RUN apt update -y && apt install -y \
+    curl \
+    wget \
+    php-fpm \
+    php-mysql \
+    php-curl \
+    php-json \
+    php-xml \
+    php-mbstring \
+    && rm -rf /var/log/apt/* /var/lib/apt/lists/*
 
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+# Add wordpress system user and prepare directories
+RUN groupadd -f $WORDPRESS_USER && id -u $WORDPRESS_USER &>/dev/null || useradd -g $WORDPRESS_USER $WORDPRESS_USER \
+    && mkdir -p /var/www/wordpress /run/php
 
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
-	| tee /etc/apt/sources.list.d/php.list
+# Delete default www pool to prevent duplication/overhead
+RUN rm -f /etc/php/8.2/fpm/pool.d/www.conf
 
-RUN apt update -y && apt install -y php php-mysql php-curl php-json \
-	php-xml php-mbstring php-fpm
+COPY ./wp_pool.conf /etc/php/8.2/fpm/pool.d/wordpress_pool.conf
+COPY ./script.sh /usr/local/bin/
 
-RUN sed -i 's/;daemonize = yes/daemonize = yes/' /etc/php/8.4/fpm/php-fpm.conf
+RUN chmod +x /usr/local/bin/script.sh
 
-RUN sed -i "s/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 0.0.0.0/" /etc/php/8.4/fpm/pool.d/www.conf
-RUN sed -i "s/listen = \/run\/php\/php8.4-fpm.sock/listen = \/var\/run\/php\/php8.4-fpm.sock/" /etc/php/8.4/fpm/pool.d/www.conf
-
-COPY ./script.sh /
-
-COPY ./wp_pool.conf /etc/php/8.4/fpm/pool.d/wordpress_pool.conf
-
-RUN groupadd $WORDPRESS_USER && useradd -g $WORDPRESS_USER $WORDPRESS_USER
-
-RUN chmod +x ./script.sh
-
-ENTRYPOINT ["./script.sh"]
+ENTRYPOINT ["script.sh"]

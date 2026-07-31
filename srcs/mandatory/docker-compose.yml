@@ -10,21 +10,21 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/ariyad/data/mariadb_data
+      device: /home/${USER}/data/mariadb_data
 
   wp-files:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ariyad/data/wp_data
+      device: /home/${USER}/data/wp_data
 
 services:
   mariadb:
     build: ./mariadb
     container_name: mariadb
     volumes:
-      - mariadb-data:/mariadb-data
+      - mariadb-data:/var/lib/mysql
     restart: always
     env_file:
       - ./.env
@@ -34,13 +34,10 @@ services:
     networks:
       - my_net
     healthcheck:
-      start_period: 1m
-      interval: 1m
-      test:
-        [
-          "CMD-SHELL",
-          '[ -d /mariadb-data ] && [ "$(ls -A /mariadb-data 2>/dev/null)" ]',
-        ]
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   wordpress:
     build:
@@ -61,13 +58,10 @@ services:
     networks:
       - my_net
     healthcheck:
-      start_period: 1m
-      interval: 1m
-      test:
-        [
-          "CMD-SHELL",
-          '[ -d /var/www/wordpress ] && [ "$(ls -A /var/www/wordpress 2>/dev/null)" ]',
-        ]
+      test: ["CMD-SHELL", "cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     build: ./nginx
@@ -82,3 +76,4 @@ services:
         condition: service_healthy
     networks:
       - my_net
+

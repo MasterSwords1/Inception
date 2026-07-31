@@ -1,25 +1,13 @@
 FROM debian:bookworm
 
-RUN apt update -y && apt install -y nginx openssl
-
-RUN mkdir -p /run/nginx /etc/nginx/ssl /var/www/wordpress
-
-RUN chmod 755 /var/www/wordpress && chown -R www-data:www-data /var/www/wordpress
+RUN apt update -y && apt install -y nginx openssl && rm -rf /var/lib/apt/lists/*
 
 COPY ./wordpress.conf /etc/nginx/sites-enabled/wordpress
+COPY ./script.sh /usr/local/bin/
 
-RUN openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-	-keyout /etc/nginx/ssl/key.key \
-	-out /etc/nginx/ssl/cert.crt \
-	-subj "/C=US/ST=CA/L=SanFrancisco/O=LOL/CN=ariyad.42.fr" \
-	-addext "subjectAltName=DNS:ariyad.42.fr,DNS:localhost"
-
-COPY ./script.sh /
-
-RUN chmod +x /script.sh
-
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+RUN chmod +x /usr/local/bin/script.sh
 
 EXPOSE 443
 
-ENTRYPOINT ["./script.sh"]
+ENTRYPOINT ["script.sh"]
+

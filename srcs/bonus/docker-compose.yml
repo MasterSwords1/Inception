@@ -10,20 +10,21 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/ariyad/data/mariadb_data
+      device: /home/${USER}/data/mariadb_data
 
   wp-files:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ariyad/data/wp_data
+      device: /home/${USER}/data/wp_data
+
   owncast-data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ariyad/data/owncast_data
+      device: /home/${USER}/data/owncast_data
 
 services:
   ftp-server:
@@ -32,17 +33,18 @@ services:
       args:
         - FTP_USER=${FTP_USER}
         - FTP_USER_PASS=${FTP_USER_PASS}
-    container_name: ftp_server
+    container_name: ftp-server
     depends_on:
       wordpress:
         condition: service_healthy
     restart: always
     volumes:
-      - wp-files:/home/wp-filer
+      - wp-files:/var/www/wordpress
     networks:
       - my_net
     ports:
-      - 2222:22
+      - 21:21
+      - 40000-40010:40000-40010
 
   owncast:
     build: ./owncast
@@ -52,12 +54,13 @@ services:
       - 8000:8000
     volumes:
       - owncast-data:/owncast/data
+
   mariadb:
     build: ./mariadb
     container_name: mariadb
     restart: always
     volumes:
-      - mariadb-data:/mariadb-data
+      - mariadb-data:/var/lib/mysql
     env_file:
       - ./.env
     environment:
@@ -66,13 +69,10 @@ services:
     networks:
       - my_net
     healthcheck:
-      start_period: 1m
-      interval: 1m
-      test:
-        [
-          "CMD-SHELL",
-          '[ -d /mariadb-data ] && [ "$(ls -A /mariadb-data 2>/dev/null)" ]',
-        ]
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   wordpress:
     build:
@@ -95,13 +95,10 @@ services:
     networks:
       - my_net
     healthcheck:
-      start_period: 1m
-      interval: 1m
-      test:
-        [
-          "CMD-SHELL",
-          '[ -d /var/www/wordpress ] && [ "$(ls -A /var/www/wordpress 2>/dev/null)" ]',
-        ]
+      test: ["CMD-SHELL", "cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   adminer:
     build:
@@ -138,3 +135,4 @@ services:
     restart: always
     networks:
       - my_net
+

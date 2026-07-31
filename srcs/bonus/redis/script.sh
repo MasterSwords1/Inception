@@ -1,3 +1,5 @@
 #!/bin/bash
+set -e
 
-redis-server /etc/redis/redis.conf
+# Run redis in foreground
+exec redis-server /etc/redis/redis.conf --daemonize no
