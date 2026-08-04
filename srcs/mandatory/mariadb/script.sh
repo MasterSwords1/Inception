@@ -1,15 +1,12 @@
 #!/bin/bash
 set -e
 
-# Secure runtime directory for PID/socket
 mkdir -p /var/run/mysqld
 chown -R mysql:mysql /var/run/mysqld
 
-# Initialize database if empty
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
     
-    # Bootstrap setup using a temporary SQL file to prevent race conditions
     tmp_sql="/tmp/init.sql"
     cat << EOF > "$tmp_sql"
 FLUSH PRIVILEGES;

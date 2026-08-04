@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# Wait for MariaDB using native client checks instead of sleep loops
 echo "Waiting for MariaDB..."
 until mariadb -h mariadb -u "${WP_ADMIN}" -p"${WP_ADMIN_PASS}" -e "SELECT 1;" &>/dev/null; do
     sleep 1
@@ -10,7 +9,6 @@ echo "MariaDB is online!"
 
 cd /var/www/wordpress
 
-# Clean installation process
 if ! wp core is-installed --allow-root; then
     wp core download --allow-root
     wp config create \
@@ -29,7 +27,6 @@ if ! wp core is-installed --allow-root; then
         --admin_email="${WP_ADMIN_EMAIL:-admin@domain.com}"
 fi
 
-# Redis configuration & activation
 if ! wp plugin is-active redis-cache --allow-root; then
     wp plugin install redis-cache --activate --allow-root
     wp config set WP_REDIS_HOST "redis" --add --allow-root
@@ -40,8 +37,6 @@ if ! wp plugin is-active redis-cache --allow-root; then
     wp redis enable --allow-root
 fi
 
-# Apply ownership to wordpress volume
 chown -R wordpress_user:wordpress_user /var/www/wordpress
 
-# Run PHP-FPM in foreground (daemon off)
 exec php-fpm8.2 -F

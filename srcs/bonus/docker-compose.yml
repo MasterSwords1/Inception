@@ -136,3 +136,12 @@ services:
     networks:
       - my_net
 
+  static-page:
+    build: ./static-page
+    container_name: static-page
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - my_net
+
