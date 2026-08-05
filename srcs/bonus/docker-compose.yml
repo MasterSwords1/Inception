@@ -37,7 +37,7 @@ services:
     depends_on:
       wordpress:
         condition: service_healthy
-    restart: always
+    restart: on-failure
     volumes:
       - wp-files:/var/www/wordpress
     networks:
@@ -49,7 +49,7 @@ services:
   owncast:
     build: ./owncast
     container_name: owncast
-    restart: always
+    restart: on-failure
     ports:
       - 8000:8000
     volumes:
@@ -58,7 +58,7 @@ services:
   mariadb:
     build: ./mariadb
     container_name: mariadb
-    restart: always
+    restart: on-failure
     volumes:
       - mariadb-data:/var/lib/mysql
     env_file:
@@ -80,7 +80,7 @@ services:
       args:
         - WORDPRESS_USER=wordpress_user
     container_name: wordpress
-    restart: always
+    restart: on-failure
     volumes:
       - wp-files:/var/www/wordpress
     env_file:
@@ -106,7 +106,7 @@ services:
       args:
         - WORDPRESS_USER=wordpress_user
     container_name: adminer
-    restart: always
+    restart: on-failure
     volumes:
       - wp-files:/var/www/wordpress
     depends_on:
@@ -118,7 +118,7 @@ services:
   nginx:
     build: ./nginx
     container_name: nginx
-    restart: always
+    restart: on-failure
     ports:
       - 443:443
     volumes:
@@ -132,14 +132,14 @@ services:
   redis:
     build: ./redis
     container_name: redis
-    restart: always
+    restart: on-failure
     networks:
       - my_net
 
   static-page:
     build: ./static-page
     container_name: static-page
-    restart: always
+    restart: on-failure
     ports:
       - 8081:80
     networks:
