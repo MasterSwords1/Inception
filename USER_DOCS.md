@@ -22,7 +22,7 @@ The subject requires the website to be accessible via a specific domain (typical
    ```
 2. Add the following line (replace `your_login` with your actual 42 login):
    ```text
-   127.0.0.1  your_login.42.fr
+   127.0.0.1  your_login.42.fr 42.ariyad.fr
    ```
 
 ### Environment Variables
