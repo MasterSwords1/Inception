@@ -7,7 +7,7 @@ if [ ! -f /etc/nginx/ssl/cert.crt ]; then
         -keyout /etc/nginx/ssl/key.key \
         -out /etc/nginx/ssl/cert.crt \
         -subj "/C=FR/ST=IDF/L=Paris/O=42/CN=${DOMAIN_NAME:-localhost}" \
-        -addext "subjectAltName=DNS:${DOMAIN_NAME:-localhost},DNS:42.ariyad.fr"
+        -addext "subjectAltName=DNS:localhost,DNS:42.ariyad.fr"
 fi
 
 rm -f /etc/nginx/sites-enabled/default
