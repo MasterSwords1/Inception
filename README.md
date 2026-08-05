@@ -39,14 +39,21 @@ cp srcs/bonus/.env.example srcs/bonus/.env
 ```
 *Edit these files with your specific configurations and credentials.*
 
-### 4. Build and Run
-Use the `Makefile` to manage the infrastructure:
+**Build and Run** Use the `Makefile` to manage the infrastructure:
 
-**Mandatory Part:**
+**Basic Operations:**
 ```bash
 make all        # Build and start mandatory services
 make stats      # Check container status
 make log        # View container logs
+make down       # Stop and remove containers
+```
+
+**Cleanup and Rebuild:**
+```bash
+make clean      # Stop containers and remove images
+make fclean     # Full cleanup (containers, images, volumes, and networks)
+make re         # Full rebuild from scratch
 ```
 
 **Bonus Part:**
@@ -55,10 +62,6 @@ make bonus      # Build and start all services including bonuses
 make bonus_stats
 make bonus_log
 ```
-
-**Stop Services:**
-```bash
-make down       # Stop and remove containers
 ```
 
 ---
