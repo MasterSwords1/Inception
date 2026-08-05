@@ -45,9 +45,9 @@ Data persistence is handled through local bind mounts. Volumes are mapped from t
 - **Role**: Object cache for WordPress to improve performance.
 - **Details**: WordPress is configured to use Redis as a caching backend.
 
-#### 2. FTP Server (`vsftpd`)
-- **Role**: File management for the WordPress volume.
-- **Details**: Provides authenticated access to `/var/www/wordpress`.
+#### 2. SFTP Server (`openssh-server`)
+- **Role**: Secure file management for the WordPress volume.
+- **Details**: Provides authenticated access to `/var/www/wordpress` over the SSH protocol (SFTP). Restricted to SFTP-only access for the user.
 
 #### 3. Adminer
 - **Role**: Database management web interface.

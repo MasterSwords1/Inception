@@ -27,13 +27,13 @@ volumes:
       device: /home/${USER}/data/owncast_data
 
 services:
-  ftp-server:
+  sftp-server:
     build:
-      context: ./ftp-server
+      context: ./sftp-server
       args:
         - FTP_USER=${FTP_USER}
         - FTP_USER_PASS=${FTP_USER_PASS}
-    container_name: ftp-server
+    container_name: sftp-server
     depends_on:
       wordpress:
         condition: service_healthy
@@ -43,8 +43,7 @@ services:
     networks:
       - my_net
     ports:
-      - 21:21
-      - 40000-40010:40000-40010
+      - 22:22
 
   owncast:
     build: ./owncast

@@ -76,6 +76,7 @@ The bonus part adds services like Redis, FTP, Adminer, a static site, and more.
 Once the containers are running, you can access the services via your browser:
 
 - **WordPress Site**: `https://your_login.42.fr`
+- **SFTP (Bonus)**: Connect via SFTP on port 22 using your configured credentials.
 - **Adminer (Bonus)**: `https://your_login.42.fr/adminer` (or as configured)
 - **Static Page (Bonus)**: `https://your_login.42.fr/static` (or as configured)
 
