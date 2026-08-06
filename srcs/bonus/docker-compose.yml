@@ -62,9 +62,6 @@ services:
       - mariadb-data:/var/lib/mysql
     env_file:
       - ./.env
-    environment:
-      - WP_ADMIN=${WP_ADMIN}
-      - WP_USER=${WP_USER}
     networks:
       - my_net
     healthcheck:
@@ -84,9 +81,6 @@ services:
       - wp-files:/var/www/wordpress
     env_file:
       - ./.env
-    environment:
-      - WP_ADMIN=${WP_ADMIN}
-      - WP_ADMIN_PASS=${WP_ADMIN_PASS}
     depends_on:
       mariadb:
         condition: service_healthy
