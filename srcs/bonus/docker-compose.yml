@@ -65,7 +65,7 @@ services:
     networks:
       - my_net
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${WP_ADMIN_PASS}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$WP_ADMIN_PASS"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -89,7 +89,7 @@ services:
     networks:
       - my_net
     healthcheck:
-      test: ["CMD-SHELL", "pidof php-fpm8.2"]
+      test: ["CMD-SHELL", "ps aux | grep php-fpm | grep -v grep"]
       interval: 10s
       timeout: 5s
       retries: 5
