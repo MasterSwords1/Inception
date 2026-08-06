@@ -26,6 +26,9 @@ if ! wp core is-installed --allow-root; then
         --admin_email="${WP_ADMIN_EMAIL:-admin@domain.com}"
 fi
 
+groupadd -f wordpress_user
+id -u wordpress_user &>/dev/null || useradd -g wordpress_user wordpress_user
+
 if ! wp plugin is-active redis-cache --allow-root; then
     wp plugin install redis-cache --activate --allow-root
     wp config set WP_REDIS_HOST "redis" --add --allow-root
