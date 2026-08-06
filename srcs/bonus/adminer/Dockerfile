@@ -13,7 +13,7 @@ RUN apt update -y && apt install -y \
     php-mbstring \
     && rm -rf /var/log/apt/* /var/lib/apt/lists/*
 
-RUN groupadd -f $WORDPRESS_USER && id -u $WORDPRESS_USER &>/dev/null || useradd -g $WORDPRESS_USER $WORDPRESS_USER \
+RUN groupadd -f "$WORDPRESS_USER" && { id -u "$WORDPRESS_USER" >/dev/null 2>&1 || useradd -g "$WORDPRESS_USER" "$WORDPRESS_USER"; } \
     && mkdir -p /var/www/wordpress /run/php
 
 RUN rm -f /etc/php/8.2/fpm/pool.d/www.conf

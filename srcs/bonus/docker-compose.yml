@@ -10,14 +10,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/mariadb_data
+      device: /home/${USER}/data/mariadb_data_bonus
 
   wp-files:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/wp_data
+      device: /home/${USER}/data/wp_data_bonus
 
   owncast-data:
     driver: local
@@ -38,6 +38,8 @@ services:
       wordpress:
         condition: service_healthy
     restart: on-failure
+    env_file:
+      - ./.env
     volumes:
       - wp-files:/var/www/wordpress
     networks:
