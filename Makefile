@@ -34,6 +34,7 @@ clean:
 
 fclean: clean
 	docker system prune -a --volumes -f
+	sudo rm -rf ${MANDATORY_DATA_DIRS} ${BONUS_DATA_DIRS}
 
 stats:
 	docker compose -f srcs/mandatory/docker-compose.yml ps -a

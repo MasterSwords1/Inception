@@ -45,7 +45,7 @@ services:
     networks:
       - my_net
     ports:
-      - 22:22
+      - 2222:22
 
   owncast:
     build: ./owncast
