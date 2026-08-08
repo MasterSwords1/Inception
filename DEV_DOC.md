@@ -7,10 +7,10 @@ This technical document details the internal architecture, build pipelines, serv
 ## 1. Setting Up the Environment from Scratch
 
 ### System Prerequisites
-Developers must use a Linux Virtual Machine (e.g. Debian 12 / Ubuntu 22.04 LTS) equipped with:
-- **Docker Engine**: Version 24.0 or higher.
-- **Docker Compose**: Plugin version 2.20 or higher.
-- **GNU Make**: Version 4.3 or higher.
+Developers must use a Linux Virtual Machine (Debian/Ubuntu recommended) equipped with:
+- **Docker Engine**
+- **Docker Compose**
+- **GNU Make**
 - **OpenSSL**: For certificate generation inside NGINX build routines.
 
 ### Repository Directory Structure

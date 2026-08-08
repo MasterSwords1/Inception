@@ -97,7 +97,7 @@ The project contains two configurations:
 ### 1. Prerequisites
 Ensure you have the following installed on your host system:
 - **Operating System**: Linux (Debian/Ubuntu recommended) inside a Virtual Machine.
-- **Tools**: `docker` (v24.0+), `docker compose` (v2.20+), `make`, and `git`.
+- **Tools**: `docker`, `docker compose`, `make`, and `git`.
 
 ### 2. Host Domain Setup
 Map your local 42 domain (`ariyad.42.fr`) to your loopback IP address in `/etc/hosts`:
@@ -142,7 +142,6 @@ cp srcs/bonus/.env.example srcs/bonus/.env
 - [NGINX Documentation & TLS Setup](https://nginx.org/en/docs/)
 - [MariaDB Knowledge Base](https://mariadb.com/kb/en/)
 - [WordPress CLI (WP-CLI) Commands](https://developer.wordpress.org/cli/commands/)
-- [Debian Bookworm Documentation](https://www.debian.org/doc/)
 
 ### AI Usage Description
 In accordance with Chapter IV of the 42 subject rules, AI assistance (specifically Google Antigravity) was used in the development of this project for the following tasks:
@@ -150,10 +149,7 @@ In accordance with Chapter IV of the 42 subject rules, AI assistance (specifical
 1. **Documentation Formatting & Structuring**:
    - Structuring Markdown files ([`README.md`](file:///home/abderahmanriyad15/Inception/README.md), [`USER_DOC.md`](file:///home/abderahmanriyad15/Inception/USER_DOC.md), [`DEV_DOC.md`](file:///home/abderahmanriyad15/Inception/DEV_DOC.md)) to strictly match Chapter VI and Chapter VII specifications.
    - Summarizing comparison tables (VM vs Docker, Secrets vs Env, Docker Network vs Host, Volumes vs Bind Mounts).
-2. **Dockerfile & Shell Script Optimization**:
-   - Reviewing shell script entrypoints to ensure compliance with PID 1 execution (using `exec` to replace shell processes).
-   - Verifying healthcheck commands (e.g. `cgi-fcgi` for PHP-FPM and `mysqladmin ping` for MariaDB).
-3. **Validation & Verification**:
+2. **Validation & Verification**:
    - Every AI-generated suggestion, configuration snippet, and text document was manually reviewed, verified, tested, and validated in a live Virtual Machine environment to ensure complete understanding and technical accuracy.
 
 ---
